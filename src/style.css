@@ -1,0 +1,766 @@
+:root {
+    --bg-primary: #1a1b26;
+    --bg-secondary: #24283b;
+    --text-primary: #a9b1d6;
+    --text-secondary: #7aa2f7;
+    --accent: #bb9af7;
+    --error: #f7768e;
+    --success: #9ece6a;
+    --border-radius: 6px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+}
+
+html {
+    height: 100vh;
+    overflow: hidden;
+}
+
+body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    padding: 16px;
+    gap: 16px;
+    height: calc(100vh - 32px);
+    overflow: hidden;
+}
+
+/* Side Panel Styles */
+.side-panel {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid #414868;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.side-panel.collapsed {
+    width: 48px;
+    padding: 0;
+}
+
+.side-panel.collapsed .side-panel-header h3,
+.side-panel.collapsed .quick-access-item .name {
+    display: none;
+}
+
+.side-panel.collapsed .side-panel-header {
+    justify-content: center;
+    padding: 12px 0;
+}
+
+.side-panel.collapsed .quick-access-item {
+    justify-content: center;
+    padding: 8px 0;
+}
+
+.side-panel.collapsed .quick-access {
+    padding: 8px 0;
+}
+
+.side-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    border-bottom: 1px solid #414868;
+}
+
+.side-panel-header h3 {
+    font-size: 14px;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#togglePanel {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px;
+    transition: color 0.2s ease;
+}
+
+#togglePanel:hover {
+    color: var(--accent);
+}
+
+.quick-access {
+    flex: 1;
+    padding: 8px;
+    overflow-y: auto;
+}
+
+.quick-access-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 4px;
+}
+
+.quick-access-item:hover {
+    background-color: var(--bg-primary);
+}
+
+.quick-access-item .icon {
+    color: var(--text-secondary);
+    font-size: 16px;
+}
+
+.quick-access-item:hover .icon {
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--accent);
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    height: 100%;
+}
+
+.file-list {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 8px;
+    margin-right: -8px;
+}
+
+/* Customize scrollbar */
+.file-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.file-list::-webkit-scrollbar-track {
+    background: var(--bg-primary);
+    border-radius: var(--border-radius);
+}
+
+.file-list::-webkit-scrollbar-thumb {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid #414868;
+}
+
+.file-list::-webkit-scrollbar-thumb:hover {
+    background: var(--accent);
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid #414868;
+    margin-bottom: 16px;
+}
+
+.toolbar button {
+    padding: 8px 16px;
+    border: 1px solid var(--accent);
+    border-radius: var(--border-radius);
+    background-color: transparent;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.toolbar button:hover {
+    background-color: var(--accent);
+    color: var(--bg-primary);
+    box-shadow: 0 0 12px var(--accent);
+}
+
+#refreshButton, #newFolderButton {
+    padding: 8px;
+    font-size: 16px;
+}
+
+#upButton {
+    padding: 8px 16px;
+    border: 1px solid var(--accent);
+    border-radius: var(--border-radius);
+    background-color: transparent;
+    color: var(--accent);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+#upButton:hover {
+    background-color: var(--accent);
+    color: var(--bg-primary);
+}
+
+#currentPath {
+    flex: 1;
+    padding: 8px 12px;
+    background-color: var(--bg-primary);
+    border-radius: var(--border-radius);
+    border: 1px solid #414868;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-family: inherit;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+#currentPath:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+}
+
+.name-container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.name-container .name {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.name-container .info {
+    font-size: 11px;
+    color: var(--text-primary);
+    opacity: 0.7;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-item:hover .info {
+    opacity: 1;
+}
+
+/* Update existing file-item styles */
+.file-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin: 2px 0;
+    border: 1px solid transparent;
+    gap: 12px;
+}
+
+.file-item:hover {
+    background-color: var(--bg-primary);
+    border-color: var(--accent);
+}
+
+.file-item .icon {
+    margin-right: 12px;
+    font-size: 1.2em;
+    color: var(--text-secondary);
+}
+
+.file-item .name {
+    flex: 1;
+    font-size: 14px;
+}
+
+.file-item button {
+    padding: 6px;
+    border: none;
+    border-radius: var(--border-radius);
+    background-color: transparent;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: all 0.2s ease;
+    color: var(--error);
+}
+
+.file-item button:hover {
+    opacity: 1;
+    background-color: rgba(247, 118, 142, 0.1);
+}
+
+/* Anime-inspired glow effects */
+.file-item:hover .icon {
+    text-shadow: 0 0 8px var(--text-secondary);
+}
+
+#upButton:hover {
+    box-shadow: 0 0 12px var(--accent);
+}
+
+/* Selection style */
+::selection {
+    background-color: var(--accent);
+    color: var(--bg-primary);
+}
+
+/* Status bar style */
+.status-bar {
+    margin-top: 16px;
+    padding: 8px 12px;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid #414868;
+    font-size: 12px;
+    color: var(--text-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-bar span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.status-bar span .icon {
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+/* Keyboard shortcuts modal */
+.shortcuts-modal .modal-body {
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.shortcuts-section {
+    margin-bottom: 24px;
+}
+
+.shortcuts-section h3 {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.shortcut-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.shortcut-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background-color: var(--bg-primary);
+    border-radius: var(--border-radius);
+    border: 1px solid #414868;
+    min-height: 36px;
+}
+
+.shortcut-item .key {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 6px;
+    background-color: var(--bg-secondary);
+    border-radius: 4px;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+    min-width: 30px;
+    justify-content: center;
+}
+
+.shortcut-item .description {
+    color: var(--text-primary);
+    font-size: 12px;
+    margin-left: 12px;
+    flex: 1;
+}
+
+.file-item.selected {
+    background-color: var(--bg-primary);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent);
+}
+
+.file-item.selected .icon {
+    color: var(--accent);
+    text-shadow: 0 0 8px var(--accent);
+}
+
+/* Add this to the existing CSS */
+.file-item:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+/* Add tooltips */
+[title] {
+    position: relative;
+}
+
+[title]:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: var(--border-radius);
+    font-size: 12px;
+    white-space: nowrap;
+    z-index: 1000;
+    border: 1px solid #414868;
+}
+
+.side-panel-footer {
+    padding: 8px;
+    border-top: 1px solid #414868;
+    margin-top: auto;
+}
+
+/* Add Iconify styles */
+iconify-icon {
+    color: inherit;
+    font-size: inherit;
+    vertical-align: -0.125em;
+}
+
+.icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quick-access-item iconify-icon,
+.file-item iconify-icon {
+    font-size: 1.2em;
+    color: var(--text-secondary);
+}
+
+.quick-access-item:hover iconify-icon,
+.file-item:hover iconify-icon {
+    color: var(--accent);
+    filter: drop-shadow(0 0 8px var(--accent));
+}
+
+.file-item.selected iconify-icon {
+    color: var(--accent);
+    filter: drop-shadow(0 0 8px var(--accent));
+}
+
+button iconify-icon {
+    font-size: inherit;
+    width: 1.2em;
+    height: 1.2em;
+}
+
+.toolbar button iconify-icon {
+    font-size: 1.2em;
+}
+
+.status-bar iconify-icon {
+    font-size: 1.2em;
+    color: var(--text-secondary);
+}
+
+/* Titlebar styles */
+.titlebar {
+    height: 32px;
+    background-color: var(--bg-secondary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    user-select: none;
+    border-bottom: 1px solid #414868;
+}
+
+.titlebar-drag {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 12px;
+    -webkit-app-region: drag;
+}
+
+.titlebar-icon {
+    font-size: 16px;
+    color: var(--accent);
+}
+
+.titlebar-text {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--text-secondary);
+}
+
+.window-controls {
+    display: flex;
+    -webkit-app-region: no-drag;
+}
+
+.window-control {
+    width: 46px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.window-control:hover {
+    background-color: var(--bg-primary);
+}
+
+#closeButton:hover {
+    background-color: var(--error);
+    color: #ffffff;
+}
+
+.window-control iconify-icon {
+    font-size: 18px;
+}
+
+.expand-panel-button {
+    display: none;
+}
+
+/* Modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid #414868;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #414868;
+}
+
+.modal-header h2 {
+    font-size: 18px;
+    color: var(--text-secondary);
+}
+
+.modal-header button {
+    background: none;
+    border: none;
+    color: var(--text-primary);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: var(--border-radius);
+}
+
+.modal-header button:hover {
+    background-color: var(--error);
+    color: #ffffff;
+}
+
+.modal-body {
+    padding: 16px;
+}
+
+.settings-section {
+    margin-bottom: 24px;
+}
+
+.settings-section h3 {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 12px;
+}
+
+.setting-item {
+    margin-bottom: 16px;
+}
+
+.setting-item label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+}
+
+.setting-item input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+.path-input {
+    display: flex;
+    gap: 8px;
+}
+
+.path-input input {
+    flex: 1;
+    padding: 8px;
+    background-color: var(--bg-primary);
+    border: 1px solid #414868;
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-family: inherit;
+}
+
+.path-input input:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 1px var(--accent);
+}
+
+.path-input button {
+    padding: 8px 16px;
+    background-color: transparent;
+    border: 1px solid var(--accent);
+    border-radius: var(--border-radius);
+    color: var(--accent);
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.path-input button:hover {
+    background-color: var(--accent);
+    color: var(--bg-primary);
+    box-shadow: 0 0 12px var(--accent);
+}
+
+select {
+    width: 100%;
+    padding: 8px;
+    background-color: var(--bg-primary);
+    border: 1px solid #414868;
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-family: inherit;
+    cursor: pointer;
+}
+
+select:focus {
+    border-color: var(--accent);
+    outline: none;
+}
+
+.modal-footer {
+    padding: 16px;
+    border-top: 1px solid #414868;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.modal-footer button {
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-footer button.primary {
+    background-color: var(--accent);
+    color: var(--bg-primary);
+    border: none;
+}
+
+.modal-footer button.primary:hover {
+    box-shadow: 0 0 12px var(--accent);
+}
+
+.modal-footer button:not(.primary) {
+    background-color: transparent;
+    border: 1px solid #414868;
+    color: var(--text-primary);
+}
+
+.modal-footer button:not(.primary):hover {
+    background-color: var(--bg-primary);
+}
+
+/* Credits style */
+.modal-credits {
+    text-align: center;
+    padding: 8px 0;
+    color: var(--text-secondary);
+    font-size: 12px;
+    opacity: 0.7;
+    border-top: 1px solid #414868;
+    margin-top: 16px;
+}
+
+.modal-credits:hover {
+    opacity: 1;
+    color: var(--accent);
+} 

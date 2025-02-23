@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Eos File Manager</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+</head>
+<body>
+    <div class="titlebar">
+        <div class="titlebar-drag">
+            <iconify-icon icon="mdi:folder" class="titlebar-icon"></iconify-icon>
+            <span class="titlebar-text">Eos File Manager</span>
+        </div>
+        <div class="window-controls">
+            <button id="minimizeButton" class="window-control" title="Minimize">
+                <iconify-icon icon="mdi:window-minimize"></iconify-icon>
+            </button>
+            <button id="maximizeButton" class="window-control" title="Maximize">
+                <iconify-icon icon="mdi:window-maximize"></iconify-icon>
+            </button>
+            <button id="closeButton" class="window-control" title="Close">
+                <iconify-icon icon="mdi:window-close"></iconify-icon>
+            </button>
+        </div>
+    </div>
+    <div class="container">
+        <div class="side-panel" id="sidePanel">
+            <div class="side-panel-header">
+                <h3><iconify-icon icon="mdi:folder"></iconify-icon> Quick Access</h3>
+                <button id="togglePanel" title="Toggle Panel">
+                    <iconify-icon icon="mdi:chevron-left"></iconify-icon>
+                </button>
+            </div>
+            <div class="quick-access">
+                <div class="quick-access-item" data-path="HOME" title="Home Directory">
+                    <iconify-icon icon="mdi:home" class="icon"></iconify-icon>
+                    <span class="name">Home</span>
+                </div>
+                <div class="quick-access-item" data-path="DESKTOP" title="Desktop">
+                    <iconify-icon icon="mdi:desktop-mac" class="icon"></iconify-icon>
+                    <span class="name">Desktop</span>
+                </div>
+                <div class="quick-access-item" data-path="DOCUMENTS" title="Documents">
+                    <iconify-icon icon="mdi:file-document" class="icon"></iconify-icon>
+                    <span class="name">Documents</span>
+                </div>
+                <div class="quick-access-item" data-path="DOWNLOADS" title="Downloads">
+                    <iconify-icon icon="mdi:download" class="icon"></iconify-icon>
+                    <span class="name">Downloads</span>
+                </div>
+            </div>
+            <div class="side-panel-footer">
+                <div class="quick-access-item" title="Pictures">
+                    <iconify-icon icon="mdi:image" class="icon"></iconify-icon>
+                    <span class="name">Pictures</span>
+                </div>
+                <div class="quick-access-item" title="Music">
+                    <iconify-icon icon="mdi:music" class="icon"></iconify-icon>
+                    <span class="name">Music</span>
+                </div>
+                <div class="quick-access-item" title="Videos">
+                    <iconify-icon icon="mdi:video" class="icon"></iconify-icon>
+                    <span class="name">Videos</span>
+                </div>
+            </div>
+        </div>
+        <div class="main-content">
+            <div class="toolbar">
+                <button id="upButton" title="Go Up">
+                    <iconify-icon icon="mdi:arrow-up"></iconify-icon> Up
+                </button>
+                <button id="refreshButton" title="Refresh">
+                    <iconify-icon icon="mdi:refresh"></iconify-icon>
+                </button>
+                <input type="text" id="currentPath" spellcheck="false" title="Enter path to navigate"/>
+                <button id="newFolderButton" title="New Folder">
+                    <iconify-icon icon="mdi:folder-plus"></iconify-icon>
+                </button>
+            </div>
+            <div class="file-list" id="fileList"></div>
+            <div class="status-bar">
+                <span id="itemCount" title="Total Items">
+                    <iconify-icon icon="mdi:file-multiple"></iconify-icon> 0 items
+                </span>
+                <span id="selectedPath" title="Selected Path">
+                    <iconify-icon icon="mdi:folder"></iconify-icon> ~/
+                </span>
+            </div>
+        </div>
+    </div>
+    <button id="expandPanel" class="expand-panel-button" title="Expand Panel">
+        <iconify-icon icon="mdi:chevron-right"></iconify-icon>
+    </button>
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button id="closeSettings">
+                    <iconify-icon icon="mdi:close"></iconify-icon>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="settings-section">
+                    <h3>Theme</h3>
+                    <select id="themeSelect">
+                        <option value="tokyo-night">Tokyo Night</option>
+                        <option value="monokai">Monokai</option>
+                        <option value="dracula">Dracula</option>
+                        <option value="nord">Nord</option>
+                        <option value="custom">Custom (Lua)</option>
+                    </select>
+                </div>
+                <div class="settings-section">
+                    <h3>Lua Styling</h3>
+                    <div class="setting-item">
+                        <label>
+                            <input type="checkbox" id="enableLua">
+                            Enable Lua Styling
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <label>Lua Script Path:</label>
+                        <div class="path-input">
+                            <input type="text" id="luaPath" placeholder="Path to your Lua theme script">
+                            <button id="browseLua">
+                                <iconify-icon icon="mdi:folder-search"></iconify-icon>
+                                Browse
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveSettings" class="primary">Save Changes</button>
+                <button id="cancelSettings">Cancel</button>
+            </div>
+            <div class="modal-credits">
+                by Yihyun
+            </div>
+        </div>
+    </div>
+    
+    <div id="shortcutsModal" class="modal shortcuts-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><iconify-icon icon="mdi:keyboard"></iconify-icon> Keyboard Shortcuts</h2>
+                <button id="closeShortcuts">
+                    <iconify-icon icon="mdi:close"></iconify-icon>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="shortcuts-section">
+                    <h3><iconify-icon icon="mdi:cursor-move"></iconify-icon> Navigation</h3>
+                    <div class="shortcut-list">
+                        <div class="shortcut-item">
+                            <span class="key">j</span>
+                            <span class="description">Move down</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="key">k</span>
+                            <span class="description">Move up</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="key">h</span>
+                            <span class="description">Go to parent directory</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="key">l</span>
+                            <span class="description">Open directory</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="key">g</span>
+                            <span class="description">Go to top</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="key">G</span>
+                            <span class="description">Go to bottom</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="shortcuts-section">
+                    <h3><iconify-icon icon="mdi:file-edit"></iconify-icon> Actions</h3>
+                    <div class="shortcut-list">
+                        <div class="shortcut-item">
+                            <span class="key">Shift + D</span>
+                            <span class="description">Delete selected item</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="key">Enter</span>
+                            <span class="description">Open selected item</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="key">Ctrl + R</span>
+                            <span class="description">Refresh</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="shortcuts-section">
+                    <h3><iconify-icon icon="mdi:cog"></iconify-icon> Application</h3>
+                    <div class="shortcut-list">
+                        <div class="shortcut-item">
+                            <span class="key">Ctrl + Shift + S</span>
+                            <span class="description">Open settings</span>
+                        </div>
+                        <div class="shortcut-item">
+                            <span class="key">Ctrl + Shift + H</span>
+                            <span class="description">Show shortcuts</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="closeShortcutsBtn">Close</button>
+            </div>
+            <div class="modal-credits">
+                by Yihyun
+            </div>
+        </div>
+    </div>
+    <script src="renderer.js"></script>
+</body>
+</html> 
