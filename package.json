@@ -1,0 +1,78 @@
+{
+  "name": "eos-file-manager",
+  "version": "1.0.0",
+  "description": "A modern, elegant file manager with vim-like keyboard shortcuts",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "build": "electron-builder",
+    "build:arm": "electron-builder --arm64",
+    "build:x64": "electron-builder --x64",
+    "build:all": "electron-builder -mwl --arm64 --x64"
+  },
+  "author": "Yihyun",
+  "license": "MIT",
+  "dependencies": {
+    "@electron/remote": "^2.1.0",
+    "date-fns": "^2.30.0"
+  },
+  "devDependencies": {
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.1",
+    "sharp": "^0.33.5"
+  },
+  "build": {
+    "appId": "ca.yihyun.eos-file-manager",
+    "productName": "EosFileManager",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "package.json"
+    ],
+    "icon": "src/assets/logo.png",
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["arm64", "x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["arm64", "x64"]
+        }
+      ]
+    },
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["arm64", "x64"]
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": ["arm64", "x64"]
+        },
+        {
+          "target": "deb",
+          "arch": ["arm64", "x64"]
+        }
+      ],
+      "category": "Utility"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Eos File Manager"
+    }
+  }
+}
