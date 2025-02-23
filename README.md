@@ -25,7 +25,7 @@ A modern, elegant file manager built with Electron, featuring a clean UI and vim
 
 1. Clone the repository:
 ```bash
-git clone [https://github.com/yihyunCS/eos-file-manager](https://github.com/YihyunCS/EosFM).git
+git clone https://github.com/YihyunCS/EosFM.git
 cd eos-file-manager
 ```
 
